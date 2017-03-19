@@ -7,7 +7,7 @@ package cine;
 
 /**
  *
- * @author SPC7Z
+ * @author Leidy Torres
  */
 public enum Tipo {
     GENERAL, EJECUTIVA, VIP;

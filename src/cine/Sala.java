@@ -5,11 +5,12 @@
  */
 package cine;
 import java.util.Scanner;
+
 /**
  *
  * @author Leidy Torres
  */
-public class Salas {
+public class Sala {
     
     private Silla [][] silla;
     
@@ -27,18 +28,44 @@ public class Salas {
     
     private int femenino;
     
+    private int totalVentas;
+    private int contadorHombres;
+    private int contadorMujeres;
+    private int contadorNinos;
+    private int contadorAdultos;
+    private byte aux;
+    
+    
     
     /**
      * Constructor que llama los metodos
      * 
      */    
-    public Salas (){
+    public Sala (){
+        
+        
         ingresoDatos();
         tipoSillas();
+        
         silla = new Silla [filas][columnas];
         llenarSala();
+        
+        do{
+        
         sillasDisponibles();
         llenarSillas();
+        tarifa();
+            System.out.println("1.INGRESAR OTRO CLIENTE.");
+            System.out.println("2.SABER ESTADISTICAS DE VENTAS.");
+            aux=teclado.nextByte();
+            if(aux==1){ 
+                aux=1;
+            }else{
+                aux=0;
+            }
+            
+        }while(aux==1);
+        imprimirEstadisticas();
     }
     
     Scanner teclado = new Scanner(System.in);
@@ -101,9 +128,9 @@ public class Salas {
         }  
     }
     
-    
+     byte deseo; 
 private void sillasDisponibles(){
-      byte deseo;
+    
       int numero;
        OUTER:
        while (true) {
@@ -128,16 +155,7 @@ private void sillasDisponibles(){
                            }
                        }
                        System.out.println("");
-                   }
-                    System.out.print("NUMERO DE SILLA : ");
-                    numero = teclado.nextInt();
-                   if (numero < (filas * columnas) && (numero < general)){
-                   llenarSillas();
-                   }else{
-                       System.out.println("EL NUMERO DE SILLA NO EXISTE");
-                       break;
-                   }
-                   
+                   }                   
                    break OUTER;
                    }
 
@@ -151,15 +169,6 @@ private void sillasDisponibles(){
                        }
                        System.out.println("");
                    }  
-                   System.out.print("NUMERO DE SILLA : ");
-                   numero = teclado.nextInt();
-                   if (numero < (filas * columnas) && (numero < ejecutiva)){
-                   llenarSillas();
-                   }else{
-                       System.out.println("EL NUMERO DE SILLA NO EXISTE");
-                       break;
-                   }
-
                    break OUTER;
                    }
 
@@ -174,16 +183,6 @@ private void sillasDisponibles(){
                        }
                        System.out.println("");
                    }  
-                   
-                    System.out.print("NUMERO DE SILLA : ");
-                    numero = teclado.nextInt();
-                    if (numero < (filas * columnas) && (numero < vip)){
-                    llenarSillas();
-                    }else{
-                       System.out.println("EL NUMERO DE SILLA NO EXISTE");
-                       break;
-                    }
-
                     break OUTER;
                     }
                default:
@@ -193,40 +192,131 @@ private void sillasDisponibles(){
        }
   }
     
-    
+    int  edad;
+    int numero;
+    String identificacion;
+    String nombre;
+    String apellido;
+    byte genero;
     private void llenarSillas(){
-       int numero;
-       String identificacion;
-       String nombre;
-       String apellido;
-       byte genero;
-       int  edad;
-
-       System.out.print("IDENTIFICACION : ");
-       identificacion = teclado.next();
-       System.out.print("NOMBRE : ");
-       nombre = teclado.next();
-       System.out.print("APELLIDO : ");
-       apellido = teclado.next();
-       System.out.println("EDAD : ");
-       edad= teclado.nextInt();
-       while(true){
-           System.out.print("*GENERO*");
-           System.out.print("1.MASCULINO");
-           System.out.print("2.FEMENINO");
-           genero = teclado.nextByte();
-           Persona persona;
-           if(genero==1){
-               persona = new Persona(identificacion,nombre,apellido,edad,Genero.MASCULINO);
-               break;
-           }else if(genero==2){
-               persona = new Persona(identificacion,nombre,apellido,edad,Genero.FEMENINO);
-               break;
-           }else{
-               System.out.println("GENERO NO ADMITIDO");
-           }
-       }
+        
+        
+        switch(deseo){
+            case 1:
+                while(true){
+                    System.out.print("NUMERO DE SILLA : ");
+                    numero = teclado.nextInt();
+                    if(numero<=general*columnas){
+                        break;
+                    }
+                
+                }
+            break;
+            case 2:
+                while(true){
+                    System.out.print("NUMERO DE SILLA : ");
+                    numero = teclado.nextInt();
+                     if((general*columnas<numero)&&(numero<= ejecutiva*columnas+general*columnas)){
+                        break;
+                    }
+                }
+            break;
+            case 3:
+                while(true){
+                    System.out.print("NUMERO DE SILLA : ");
+                    numero = teclado.nextInt();
+                     if((ejecutiva*columnas+general*columnas<numero)&&(numero<=vip*columnas+ejecutiva*columnas+general*columnas)){
+                        break;
+                    }
+                }    
+            
+            break;
+        }
+        
+        System.out.print("IDENTIFICACION : ");
+        identificacion = teclado.next();
+        System.out.print("NOMBRE : ");
+        nombre = teclado.next();
+        System.out.print("APELLIDO : ");
+        apellido = teclado.next();
+        System.out.println("EDAD : ");
+        edad= teclado.nextInt();
+        while(true){
+            System.out.print("**GENERO**");
+            System.out.print("1.MASCULINO");
+            System.out.print("2.FEMENINO");
+            genero = teclado.nextByte();
+            
+            Persona persona;
+            if(genero==1){
+                persona = new Persona(identificacion,nombre,apellido,edad,Genero.MASCULINO);
+                contadorHombres++;
+                break;
+            }else if(genero==2){
+                persona = new Persona(identificacion,nombre,apellido,edad,Genero.FEMENINO);
+                contadorMujeres++;
+                break;
+            }else{
+                System.out.println("GENERO NO ADMITIDO");
+            }
+        }   
     }
+    
+    private void tarifa(){
+        
+        for(int i=0 ; i< filas ; i++) {
+            for(int j=0 ; j< columnas ; j++){
+                if(this.silla[i][j].getNumero()== numero) {
+                    int taquilla;
+                    int precioEdad=0;
+                    int precioTipoSilla=0;
+                    if((edad>= 5) && (edad <= 17)){
+                        precioEdad=1000;
+                        contadorNinos++;
+                    }else if ((edad >=18) && (edad <= 80)){
+                        precioEdad=2000;
+                        contadorAdultos++;
+                    }
+                    switch (deseo) {
+                        case 1:
+                            precioTipoSilla = 1000;
+                            break;
+                        case 2:
+                            precioTipoSilla = 2000;
+                            break;
+                        case 3:
+                            precioTipoSilla = 3000;
+                            break;
+                        default:
+                            break;
+                    }
+                    taquilla = precioEdad + precioTipoSilla;
+                    totalVentas+=taquilla;
+                    System.out.println("TIQUETE");
+                    System.out.println("NOMBRE: "+nombre+"");
+                    System.out.println("APELLIDO: "+apellido+"");
+                    System.out.println("IDENTIFICACION: "+identificacion+"");
+                    
+                    
+                    System.out.println("PRECIO TAQUILLA : "+taquilla);
+                }
+            }
+        }
+    }
+    
+    private void imprimirEstadisticas(){
+        System.out.println("TOTAL VENTAS: "+totalVentas);
+        System.out.println("TOTAL HOMBRES: "+ contadorHombres);
+        System.out.println("TOTAL MUJERES: "+ contadorMujeres);
+        System.out.println("TOTAL NIÑOS: "+ contadorNinos);
+        System.out.println("TOTAL ADULTOS: "+ contadorAdultos);
+
+    
+    
+    }
+    
+    
+    
     
     
     
@@ -234,4 +324,5 @@ private void sillasDisponibles(){
 
     
     
+
 
