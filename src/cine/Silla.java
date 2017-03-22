@@ -18,6 +18,7 @@ public class Silla {
     private Tipo tiposilla;
     
     private Persona  persona;
+    private int disponible;
 
     
     /**
@@ -25,10 +26,11 @@ public class Silla {
      * @param numero
      * @param persona
      */
-    public Silla(int numero, Tipo tiposilla, Persona persona) {
+    public Silla(int numero, Tipo tiposilla, Persona persona, int disponible) {
         this.numero = numero;
         this.tiposilla = tiposilla;
         this.persona = persona;
+        this.disponible= disponible;
     }
 
     /**
@@ -94,6 +96,15 @@ public class Silla {
     public void setPersona(Persona persona) {
         this.persona = persona;
     }
+
+    public int getDisponible() {
+        return disponible;
+    }
+
+    public void setDisponible(int disponible) {
+        this.disponible = disponible;
+    }
    
+    
 }
 

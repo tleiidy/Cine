@@ -27,13 +27,15 @@ public class Sala {
     private int masculino;
     
     private int femenino;
-    
+   private int numero;
     private int totalVentas;
     private int contadorHombres;
     private int contadorMujeres;
     private int contadorNinos;
     private int contadorAdultos;
     private byte aux;
+    
+    Persona persona;
     
     
     
@@ -53,10 +55,12 @@ public class Sala {
         do{
         
         sillasDisponibles();
+ 
         llenarSillas();
+        
         tarifa();
-            System.out.println("1.INGRESAR OTRO CLIENTE.");
-            System.out.println("2.SABER ESTADISTICAS DE VENTAS.");
+            System.out.println("1. INGRESAR OTRO CLIENTE.");
+            System.out.println("2. ESTADISTICAS DE VENTAS.");
             aux=teclado.nextByte();
             if(aux==1){ 
                 aux=1;
@@ -105,11 +109,11 @@ public class Sala {
             for (int  j=0; j < columnas; j++){
               Silla silla;
              if ((i+1) <= general){
-                 silla = new Silla (cont++, Tipo.GENERAL , null);             
+                 silla = new Silla (cont++, Tipo.GENERAL , null, 0);             
                 } else if ((i+1) <= (general + ejecutiva)) {
-                    silla = new Silla(cont++, Tipo.EJECUTIVA, null);
+                    silla = new Silla(cont++, Tipo.EJECUTIVA, null, 0);
                 } else {
-                   silla = new Silla(cont++, Tipo.VIP, null);
+                   silla = new Silla(cont++, Tipo.VIP, null, 0);
                 }
                 this.silla[i][j] = silla;
         }
@@ -131,15 +135,15 @@ public class Sala {
      byte deseo; 
 private void sillasDisponibles(){
     
-      int numero;
+      
        OUTER:
        while (true) {
-           System.out.println("INGRESE TIPO DE SILLA QUE DESEA");
+           System.out.println("Ingrese el tipo de silla que desea");
            if(general!=0){
                System.out.println("1.GENERAL.");
            }
            if(ejecutiva != 0){
-               System.out.println("2.PREFERENCIAL.");
+               System.out.println("2. EJECUTIVA");
            }
            if(vip!=0){
                System.out.println("3.VIP.");
@@ -150,24 +154,22 @@ private void sillasDisponibles(){
                    if (general !=0){
                    for(int i=0 ; i< filas ; i++) {
                        for(int j=0 ; j< columnas ; j++){
-                           if((this.silla[i][j].getTiposilla()== Tipo.GENERAL)&&(this.silla[i][j].getPersona()==null)) {
-                               System.out.print(this.silla[i][j].getNumero() + "-X ");
-                           }
+                           if ((this.silla[i][j].getTiposilla()== Tipo.GENERAL)&&(this.silla[i][j].getDisponible()== 0)) {
+                               System.out.print("("+this.silla[i][j].getNumero() + "-G )");
                        }
-                       System.out.println("");
-                   }                   
+                   }     System.out.println("");               
                    break OUTER;
                    }
-
+                   }
                case 2:
                    if (ejecutiva !=0){
                    for(int i=0 ; i< filas ; i++) {
                        for(int j=0 ; j< columnas ; j++){
-                           if((this.silla[i][j].getTiposilla()== Tipo.EJECUTIVA)&&(this.silla[i][j].getPersona()==null)) {
-                               System.out.print(this.silla[i][j].getNumero() + "-O ");
+                           if((this.silla[i][j].getTiposilla()== Tipo.EJECUTIVA)&&(this.silla[i][j].getDisponible()==0)) {
+                               System.out.print("("+this.silla[i][j].getNumero() + "-E )");
                            }
                        }
-                       System.out.println("");
+                       System.out.println(" ");
                    }  
                    break OUTER;
                    }
@@ -177,11 +179,11 @@ private void sillasDisponibles(){
                    if (vip!=0){
                    for(int i=0 ; i< filas ; i++) {
                        for(int j=0 ; j< columnas ; j++){
-                           if((this.silla[i][j].getTiposilla()== Tipo.VIP)&&(this.silla[i][j].getPersona()==null)) {
-                               System.out.print(this.silla[i][j].getNumero() + "+V ");
+                           if((this.silla[i][j].getTiposilla()== Tipo.VIP)&&(this.silla[i][j].getDisponible()==0)) {
+                               System.out.print("("+this.silla[i][j].getNumero() + "+V )");
                            }
                        }
-                       System.out.println("");
+                       System.out.println(" ");
                    }  
                     break OUTER;
                     }
@@ -192,8 +194,7 @@ private void sillasDisponibles(){
        }
   }
     
-    int  edad;
-    int numero;
+    int  edad, i, j;
     String identificacion;
     String nombre;
     String apellido;
@@ -203,15 +204,13 @@ private void sillasDisponibles(){
         
         switch(deseo){
             case 1:
-                while(true){
+                while (true){
                     System.out.print("NUMERO DE SILLA : ");
                     numero = teclado.nextInt();
                     if(numero<=general*columnas){
                         break;
                     }
-                
-                }
-            break;
+                }break;
             case 2:
                 while(true){
                     System.out.print("NUMERO DE SILLA : ");
@@ -259,7 +258,14 @@ private void sillasDisponibles(){
             }else{
                 System.out.println("GENERO NO ADMITIDO");
             }
-        }   
+        }
+        for(int i=0 ; i< filas ; i++) {
+            for(int j=0 ; j< columnas ; j++){
+                if(this.silla[i][j].getNumero() == numero){
+                   this.silla[i][j].setDisponible(1);
+                }
+            }
+        }
     }
     
     private void tarifa(){
